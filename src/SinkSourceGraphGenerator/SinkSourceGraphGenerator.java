@@ -37,11 +37,11 @@ public class SinkSourceGraphGenerator {
                     double rand = Math.random();
                     if (rand < 0.5) {
                         if (!hasEdge(graph.edges, u, v)) {
-                            graph.addEdge(u, v, (int) (Math.random() * (upperCap - 1) + 1));
+                            graph.addEdge(u, v, (int) (Math.random() * (upperCap - 1) + 1),0);
                         }
                     } else {
                         if (!hasEdge(graph.edges, v, u)) {
-                            graph.addEdge(v, u, (int) (Math.random() * (upperCap - 1) + 1));
+                            graph.addEdge(v, u, (int) (Math.random() * (upperCap - 1) + 1),0);
                         }
                     }
                 }

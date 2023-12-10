@@ -24,8 +24,8 @@ public class Graph {
         vertices.add(vertex);
     }
 
-    public void addEdge(Vertex u, Vertex v, int capacity) {
-        Edge edge = new Edge(u, v, capacity);
+    public void addEdge(Vertex u, Vertex v, int capacity,int flow) {
+        Edge edge = new Edge(u, v, capacity,flow);
         edges.add(edge);
         u.edges.add(edge);
 //        v.edges.add(edge);
@@ -99,7 +99,7 @@ public class Graph {
                 Vertex vertex1 = graph.vertices.stream().filter(v -> v.name == vertex1Name).findFirst().orElse(null);
                 Vertex vertex2 = graph.vertices.stream().filter(v -> v.name == vertex2Name).findFirst().orElse(null);
                 if (vertex1 != null && vertex2 != null) {
-                    graph.addEdge(vertex1, vertex2, capacity);
+                    graph.addEdge(vertex1, vertex2, capacity,0);
                 }
             }
 
@@ -109,7 +109,13 @@ public class Graph {
             int vertexName = Integer.parseInt(vertexData[0]);
             double x = Double.parseDouble(vertexData[1]);
             double y = Double.parseDouble(vertexData[2]);
-            Vertex source = new Vertex(x, y, vertexName);
+            Vertex source = null;
+            for (Vertex v:graph.vertices ){
+                if(v.name == vertexName){
+                    source = v;
+                }
+            }
+//            Vertex source = new Vertex(x, y, vertexName);
 
             scanner.nextLine();
             scanner.nextLine(); // skip the header line
@@ -118,7 +124,13 @@ public class Graph {
             vertexName = Integer.parseInt(vertexData[0]);
             x = Double.parseDouble(vertexData[1]);
             y = Double.parseDouble(vertexData[2]);
-            Vertex sink = new Vertex(x, y, vertexName);
+            Vertex sink=null;
+            for (Vertex v:graph.vertices ){
+                if(v.name == vertexName){
+                    sink = v;
+                }
+            }
+//            Vertex sink = new Vertex(x, y, vertexName);
 
             graph.setSourceSink(source,sink);
 

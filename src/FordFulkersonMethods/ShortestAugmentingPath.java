@@ -5,41 +5,29 @@ import GraphPackage.Graph;
 import GraphPackage.Vertex;
 import Results.Result;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.PriorityQueue;
+import java.util.*;
 
-class VertexWrapper{
-    Vertex v;
-    int distance;
-
-    Vertex parent;
-
-
-
-    public VertexWrapper(Vertex v,int distance){
-        this.v = v;
-        this.distance = distance;
-        this.parent = null;
-    }
-    public void setParent(Vertex p){
-        this.parent = p;
-    }
-}
-
-class VertexWrapperComparator implements Comparator<VertexWrapper> {
-
-
-//    public int compare(Student s1, Student s2) {
-//        if (s1.cgpa < s2.cgpa)
-//            return 1;
-//        else if (s1.cgpa > s2.cgpa)
-//            return -1;
-//        return 0;
+//class VertexWrapper{
+//    Vertex v;
+//    int distance;
+//
+//    Vertex parent;
+//
+//
+//
+//    public VertexWrapper(Vertex v,int distance){
+//        this.v = v;
+//        this.distance = distance;
+//        this.parent = null;
 //    }
+//    public void setParent(Vertex p){
+//        this.parent = p;
+//    }
+//}
 
+class VertexComparator implements Comparator<Vertex> {
     @Override
-    public int compare(VertexWrapper o1, VertexWrapper o2) {
+    public int compare(Vertex o1, Vertex o2) {
         if (o1.distance < o2.distance)
             return -1;
         else if (o1.distance > o2.distance)
@@ -52,120 +40,156 @@ class VertexWrapperComparator implements Comparator<VertexWrapper> {
 public class ShortestAugmentingPath {
 
 
-    private void initializeSingleSource(Graph G,Vertex source,HashMap<Integer, Integer> distance){
+    private void initializeSingleSource(Graph G,Vertex source){
 
         for(Vertex v:G.vertices){
-            distance.put(v.name,9999999);
+            v.distance=99999;
+            v.parent = null;
         }
 
-        distance.put(source.name,0);
+        source.distance=0;
 
     }
 
-    public void Relax(VertexWrapper u,VertexWrapper v,int w,PriorityQueue<VertexWrapper> pQueue){
+    public void Relax(Vertex u,Vertex v,int w,PriorityQueue<Vertex> pQueue){
 
 //        System.out.println("Relax "+u.v.name+","+v.v.name);
 //        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
 
         if(v.distance >u.distance +w){
-
-
-
             v.distance = u.distance + 1;
-            v.setParent(u.v);
+            v.parent = u;
 
-            pQueue.remove(v);
-            pQueue.add(v);
+            pQueue.offer(v);
+//            pQueue.add(v);
         }
     }
 
 
 
-    private HashMap<Vertex, VertexWrapper> dfs(Graph g, Vertex source, Vertex sink, HashMap<Integer, Integer> parent, HashMap<String, Integer> flow) {
+    private List<Vertex> Dijkastra(Graph g, Vertex source,Vertex sink) {
 
-        HashMap<Integer, Integer> distance = new HashMap<>();
-        HashMap<Vertex, VertexWrapper> ver = new HashMap<>();
+        initializeSingleSource(g,source);
 
-        initializeSingleSource(g,source,distance);
 
-        PriorityQueue<VertexWrapper> pQueue = new PriorityQueue<VertexWrapper>(new VertexWrapperComparator());
+        PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator());
         for(Vertex v:g.vertices){
-            VertexWrapper temp = new VertexWrapper(v, distance.get(v.name) );
-            ver.put(v,temp);
-            pQueue.add(temp);
+            pQueue.add(v);
         }
 
         while (!pQueue.isEmpty()){
-            VertexWrapper uWrap = pQueue.poll();
-            Vertex u = uWrap.v;
+            Vertex u = pQueue.poll();
 
-//            System.out.println("pQueue.poll(): "+u.name);
-
-
-
-
+//            System.out.println("u.name:"+u.name);
 
             for(Edge e:u.edges){
-                if( e.capacity - flow.get(Integer.toString(u.name)+Integer.toString(e.v.name)) >0){
-                    Relax(uWrap,ver.get(e.v),1,pQueue);
+
+                if(e.flow < e.capacity){
+                    Relax(u,e.v,1,pQueue);
                 }
             }
-
         }
 
-//        for (VertexWrapper vWrap: ver.values()){
-//            System.out.println("name:"+vWrap.v.name+" v.parent "+(vWrap.parent!=null ? vWrap.parent.name : "null" )+" v.distance"+vWrap.distance);
+//        for(Vertex v:g.vertices){
+//            System.out.println(v.name+" v.parent "+(v.parent!=null ? v.parent.name:"null")+ " v.distance "+v.distance);
 //        }
 
+        List<Vertex> augmentingPath = new ArrayList<>();
+        Vertex temp = sink;
 
+        while(temp != null){
+//            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
+            augmentingPath.add(temp);
+            temp = temp.parent;
+        }
 
-        return ver;
+//        augmentingPath.add(temp);
+
+        Collections.reverse(augmentingPath);
+
+        return augmentingPath;
     }
 
 
     public Result run(Graph G){
 
 
-        HashMap<String,Integer> flow = new HashMap<>();
-        for (Edge edge : G.edges) {
-            flow.put(Integer.toString(edge.u.name)+Integer.toString(edge.v.name),0);
-        }
-
-        HashMap<Integer,Integer> parent = new HashMap<>();
         int maxflow = 0,paths=0,meanLength=0,meanProportionalLength=0,totalEdges=0;
 
-        HashMap<Vertex, VertexWrapper> verWrap = dfs(G,G.source,G.sink,parent,flow);
+        Graph residualGraph = residualGraph(G);
+
+//        residualGraph.printGraph();
+
+//        List<Vertex> augmentingPath = dijkastra(residualGraph, source, sink);
+        List<Vertex> augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
 
 
-        for (VertexWrapper vWrap: verWrap.values()){
-            System.out.println("name:"+vWrap.v.name+" v.parent "+(vWrap.parent!=null ? vWrap.parent.name : "null" )+" v.distance"+vWrap.distance);
-        }
 
-        System.out.println("----------"+verWrap.get(G.sink));
-        while(verWrap.get(G.sink).parent!=null){
+        while(augmentingPath != null && augmentingPath.size() > 1){
 
-            int minFlowOnPath = 999999;
-            VertexWrapper endNodeWrap = verWrap.get(G.sink);
-            while (endNodeWrap.parent!=null){
-                for(Edge e :endNodeWrap.v.edges){
-                    if(e.u.equals(endNodeWrap.parent) && e.v.equals(endNodeWrap.v)){
-                        minFlowOnPath = Math.min(minFlowOnPath, e.capacity - flow.get(Integer.toString(endNodeWrap.parent.name)+Integer.toString(endNodeWrap.v.name)));
+
+            if (augmentingPath != null) {
+                System.out.print("Augmenting path: ");
+                for (Vertex v : augmentingPath) {
+                    System.out.print(v.name + "->");
+                }
+            } else {
+                System.out.println("No augmenting path found.");
+            }
+
+
+
+            int residualCapacity = Integer.MAX_VALUE;
+            for(int i=0; i < augmentingPath.size()-1; i++){
+                Vertex u = augmentingPath.get(i);
+                Vertex v = augmentingPath.get(i+1);
+
+                for(Edge e : u.edges){
+                    if(e.v == v){
+                        residualCapacity = Math.min(residualCapacity, e.capacity-e.flow);
+                        break;
                     }
                 }
             }
 
-            endNodeWrap = verWrap.get(G.sink);
-            while (endNodeWrap.parent!=null){
-                for(Edge e :endNodeWrap.v.edges){
-                    if(e.u.equals(endNodeWrap.parent) && e.v.equals(endNodeWrap.v)){
-                        flow.put(Integer.toString(endNodeWrap.parent.name)+Integer.toString(endNodeWrap.v.name),flow.get(Integer.toString(endNodeWrap.parent.name)+Integer.toString(endNodeWrap.v.name))+minFlowOnPath);
+            System.out.println("residualCapacity"+residualCapacity);
+
+            // update capacities for residual graph based on residual capacity
+            for(int i=0; i < augmentingPath.size()-1; i++){
+                Vertex u = augmentingPath.get(i);
+                Vertex v = augmentingPath.get(i+1);
+
+                for(Edge eOrig: G.edges){
+                    if((eOrig.u.name == u.name) && (eOrig.v.name == v.name)){
+                        eOrig.flow += residualCapacity;
+                        break;
                     }
                 }
+
+//                for(Edge e : residualGraph.get(u)){
+//                    if(e.dest == v){
+//                        e.capacity -= residualCapacity;
+//                        break;
+//                    }
+//                }
+//
+//                for(Edge bEdge : residualGraph.get(v)){
+//                    if(bEdge.dest == u){
+//                        bEdge.capacity += residualCapacity;
+//                        break;
+//                    }
+//                }
             }
 
-            maxflow = maxflow+minFlowOnPath;
+            maxflow += residualCapacity;
+            System.out.println("maxFlow: "+maxflow);
+            residualGraph = residualGraph(G);
+//            residualGraph.printGraph();
 
-            verWrap = dfs(G,G.source,G.sink,parent,flow);
+            augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
+
+
+
         }
 
 
@@ -175,5 +199,64 @@ public class ShortestAugmentingPath {
         return res;
     }
 
+
+    public Graph residualGraph(Graph G){
+
+        Graph residualGraph = new Graph();
+
+        for(Vertex v:G.vertices){
+            Vertex vertex = new Vertex(v.x, v.y, v.name);
+            residualGraph.addVertex(vertex);
+
+
+        }
+
+        for(Edge eOriginal:G.edges){
+
+            Vertex v = eOriginal.v;
+            Vertex u = eOriginal.u;
+
+            int capacity = eOriginal.capacity;
+            int flow = eOriginal.flow;
+
+            Vertex toAddV = null;
+            Vertex toAddU = null;
+            for(Vertex vResidual:residualGraph.vertices){
+                if(vResidual.name == v.name){
+                    toAddV = vResidual;
+                }
+                if(vResidual.name == u.name){
+                    toAddU = vResidual;
+                }
+            }
+
+            residualGraph.addEdge(toAddU,toAddV,capacity-flow,0);
+            residualGraph.addEdge(toAddV,toAddU,flow,0);
+
+        }
+
+//        for(Vertex u:G.vertices){
+//            for(Edge originalGraphEdge:u.edges){
+//
+//
+//            }
+//        }
+
+
+        Vertex source=null,sink=null;
+        for(Vertex v:residualGraph.vertices){
+
+            if(G.source.name==v.name){
+                source = v;
+            }
+            if(G.sink.name==v.name){
+                sink = v;
+            }
+        }
+
+        residualGraph.setSourceSink(source,sink);
+
+        return residualGraph;
+    }
 
 }
