@@ -9,6 +9,9 @@ public class Vertex {
     public int name;
     public List<Edge> edges;
 
+    public int distance=0;
+    public Vertex parent=null;
+
     public Vertex(double x, double y,int name) {
         this.x = x;
         this.y = y;
