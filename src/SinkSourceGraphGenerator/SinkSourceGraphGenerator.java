@@ -70,7 +70,7 @@ public class SinkSourceGraphGenerator {
 
         while (!queue.isEmpty()) {
             Vertex current = queue.poll();
-            System.out.println(current.name);
+//            System.out.println(current.name);
 
             for (Edge edge : current.edges) {
                 Vertex neighbor = (edge.u == current) ? edge.v : edge.u;
@@ -86,13 +86,20 @@ public class SinkSourceGraphGenerator {
 
         // Reconstruct the longest path
         Vertex endNode = lastVisited;
-        return endNode;
-       /* while (endNode != null && parentMap.get(endNode) != null) {
+        Vertex returnNode = lastVisited;
+
+
+        int length = 0;
+
+        while (endNode != null && parentMap.get(endNode) != null) {
             System.out.println(endNode.name);
             endNode = parentMap.get(endNode);
+            length++;
         }
-*/
 
+        System.out.println("length"+length);
+        graph.setBFSLength(length);
+        return returnNode;
     }
 
     private static boolean hasEdge(List<Edge> edges, Vertex u, Vertex v) {

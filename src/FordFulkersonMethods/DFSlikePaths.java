@@ -5,41 +5,14 @@ import GraphPackage.Graph;
 import GraphPackage.Vertex;
 import Results.Result;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.PriorityQueue;
 
-//class VertexWrapper{
-//    Vertex v;
-//    int distance;
-//
-//    Vertex parent;
-//
-//
-//
-//    public VertexWrapper(Vertex v,int distance){
-//        this.v = v;
-//        this.distance = distance;
-//        this.parent = null;
-//    }
-//    public void setParent(Vertex p){
-//        this.parent = p;
-//    }
-//}
+public class DFSlikePaths {
 
-class VertexComparator implements Comparator<Vertex> {
-    @Override
-    public int compare(Vertex o1, Vertex o2) {
-        if (o1.distance < o2.distance)
-            return -1;
-        else if (o1.distance > o2.distance)
-            return 1;
-        return 0;
-    }
-}
-
-
-public class ShortestAugmentingPath {
-
-
+    private int counter=0;
     private void initializeSingleSource(Graph G,Vertex source){
 
         for(Vertex v:G.vertices){
@@ -51,23 +24,32 @@ public class ShortestAugmentingPath {
 
     }
 
-    private void Relax(Vertex u,Vertex v,int w,PriorityQueue<Vertex> pQueue){
+    private void Relax(Vertex u, Vertex v, int w, PriorityQueue<Vertex> pQueue){
 
 //        System.out.println("Relax "+u.v.name+","+v.v.name);
 //        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
 
-        if(v.distance >u.distance +w){
-            v.distance = u.distance + 1;
+//        System.out.println("Relax "+u.name+","+v.name);
+        if(v.distance==99999){
+            v.distance = this.counter--;
             v.parent = u;
-
             pQueue.offer(v);
-//            pQueue.add(v);
         }
+//        if(v.distance >u.distance +w){
+//            v.distance = u.distance + 1;
+//            v.parent = u;
+//
+//            pQueue.offer(v);
+////            pQueue.add(v);
+//        }
     }
 
 
 
+
     private List<Vertex> Dijkastra(Graph g, Vertex source,Vertex sink) {
+
+        this.counter = 0;
 
         initializeSingleSource(g,source);
 
@@ -98,7 +80,7 @@ public class ShortestAugmentingPath {
         Vertex temp = sink;
 
         while(temp != null){
-//            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
+            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
             augmentingPath.add(temp);
             temp = temp.parent;
         }
@@ -109,6 +91,8 @@ public class ShortestAugmentingPath {
 
         return augmentingPath;
     }
+
+
 
 
     public Result run(Graph G){

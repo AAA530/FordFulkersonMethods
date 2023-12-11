@@ -15,9 +15,16 @@ public class Graph {
     public Vertex source;
     public Vertex sink;
 
+    public int bfsLength=0;
+
+
     public Graph() {
         this.vertices = new ArrayList<>();
         this.edges = new ArrayList<>();
+    }
+
+    public void setBFSLength(int l){
+        this.bfsLength=l;
     }
 
     public void addVertex(Vertex vertex) {
@@ -62,6 +69,10 @@ public class Graph {
             sb.append(this.source.name).append(",").append(this.source.x).append(",").append(this.source.y).append("\n");
             sb.append("\nSink,X,Y\n");
             sb.append(this.sink.name).append(",").append(this.sink.x).append(",").append(this.sink.y).append("\n");
+
+            sb.append("\nLength\n");
+            sb.append(this.bfsLength).append("\n");
+
 
             writer.write(sb.toString());
         } catch (FileNotFoundException e) {
@@ -133,6 +144,14 @@ public class Graph {
 //            Vertex sink = new Vertex(x, y, vertexName);
 
             graph.setSourceSink(source,sink);
+
+
+            scanner.nextLine();
+            scanner.nextLine(); // skip the header line
+            line = scanner.nextLine();
+            vertexData = line.split(",");
+            vertexName = Integer.parseInt(vertexData[0]);
+            graph.setBFSLength(vertexName);
 
 
         } catch (FileNotFoundException e) {

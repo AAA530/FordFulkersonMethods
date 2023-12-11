@@ -1,6 +1,7 @@
 package GraphPackage;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Vertex {
@@ -18,4 +19,5 @@ public class Vertex {
         this.name = name;
         this.edges = new ArrayList<>();
     }
+
 }

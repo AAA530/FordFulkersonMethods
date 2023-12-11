@@ -1,5 +1,7 @@
+import FordFulkersonMethods.DFSlikePaths;
 import FordFulkersonMethods.ShortestAugmentingPath;
 import GraphPackage.Graph;
+import Results.Result;
 import SinkSourceGraphGenerator.SinkSourceGraphGenerator;
 
 import static GraphPackage.Graph.loadFromCSV;
@@ -10,21 +12,31 @@ public class Main {
 
         // generate graph with n,r and upperCap
         int n = 100; // replace with your desired number of vertices
-        double r = 0.3; // replace with your desired maximum distance
+        double r = 0.2; // replace with your desired maximum distance
         int upperCap = 100; // replace with your desired maximum capacity
 
-        Graph graph = generateSinkSourceGraph(n, r, upperCap);
-        graph.printGraph();
-
-        graph.saveToCSV("src/graph.csv");
+//        Graph graph = generateSinkSourceGraph(n, r, upperCap);
+//        System.out.println(graph.bfsLength);
+//        graph.printGraph();
+//
+//        graph.saveToCSV("src/graph.csv");
 
         System.out.println("-------------------------");
         Graph loadedGraph = loadFromCSV("src/graph.csv");
         loadedGraph.printGraph();
 
-        System.out.println("-------------------------");
+        Result result = new ShortestAugmentingPath().run(loadedGraph);
+        result.print();
 
-        new ShortestAugmentingPath().run(loadedGraph);
+
+        System.out.println("-------------------------");
+        Graph loadedGraphDFSLike = loadFromCSV("src/graph.csv");
+//        loadedGraphDFSLike.printGraph();
+        Result resultDFSLike = new DFSlikePaths().run(loadedGraphDFSLike);
+//        System.out
+        resultDFSLike.print();
+
+
 
     }
 }
