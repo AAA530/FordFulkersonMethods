@@ -1,4 +1,6 @@
 import FordFulkersonMethods.DFSlikePaths;
+import FordFulkersonMethods.MaximumCapacityPath;
+import FordFulkersonMethods.RandomPaths;
 import FordFulkersonMethods.ShortestAugmentingPath;
 import GraphPackage.Graph;
 import Results.Result;
@@ -21,10 +23,9 @@ public class Main {
 
         graph.saveToCSV("src/graph.csv");
 
-        System.out.println("-------------------------");
+//        System.out.println("-------------------------");
         Graph loadedGraph = loadFromCSV("src/graph.csv");
         loadedGraph.printGraph();
-
         Result result = new ShortestAugmentingPath().run(loadedGraph);
         result.print();
 
@@ -33,8 +34,20 @@ public class Main {
         Graph loadedGraphDFSLike = loadFromCSV("src/graph.csv");
 //        loadedGraphDFSLike.printGraph();
         Result resultDFSLike = new DFSlikePaths().run(loadedGraphDFSLike);
-//        System.out
         resultDFSLike.print();
+
+        System.out.println("-------------------------");
+        Graph loadedMaximumCapGraph = loadFromCSV("src/graph.csv");
+//        loadedGraphDFSLike.printGraph();
+        Result resultMaxcap = new MaximumCapacityPath().run(loadedMaximumCapGraph);
+        resultMaxcap.print();
+
+
+        System.out.println("-------------------------");
+        Graph loadedRandomPath = loadFromCSV("src/graph.csv");
+//        loadedGraphDFSLike.printGraph();
+        Result resultRandom = new RandomPaths().run(loadedRandomPath);
+        resultRandom.print();
 
 
 

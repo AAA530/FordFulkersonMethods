@@ -7,29 +7,18 @@ import Results.Result;
 
 import java.util.*;
 
+public class RandomPaths {
 
-class VertexComparator2 implements Comparator<Vertex> {
-    @Override
-    public int compare(Vertex o1, Vertex o2) {
-        if (o1.distance < o2.distance)
-            return 1;
-        else if (o1.distance > o2.distance)
-            return -1;
-        return 0;
-    }
-}
-
-public class MaximumCapacityPath {
 
 //    private int counter=99999;
     private void initializeSingleSource(Graph G, Vertex source){
 
         for(Vertex v:G.vertices){
-            v.distance=Integer.MIN_VALUE;
+            v.distance=Integer.MAX_VALUE;
             v.parent = null;
         }
 
-        source.distance=Integer.MAX_VALUE;
+        source.distance=0;
 
     }
 
@@ -39,18 +28,20 @@ public class MaximumCapacityPath {
 //        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
 
 //        System.out.println("Relax "+u.name+","+v.name);
-//        if(v.distance==9999999){
+        if(v.distance==Integer.MAX_VALUE){
 //            v.distance = this.counter--;
-//            v.parent = u;
-//            pQueue.offer(v);
-//        }
-        if(v.distance >u.distance +w){
-            v.distance = u.distance + 1;
+            Random random = new Random();
+            v.distance= random.nextInt();
             v.parent = u;
-
             pQueue.offer(v);
-//            pQueue.add(v);
         }
+//        if(v.distance >u.distance +w){
+//            v.distance = u.distance + 1;
+//            v.parent = u;
+//
+//            pQueue.offer(v);
+////            pQueue.add(v);
+//        }
     }
 
 
@@ -63,7 +54,7 @@ public class MaximumCapacityPath {
         initializeSingleSource(g,source);
 
 
-        PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator2());
+        PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator());
 //        for(Vertex v:g.vertices){
 //            pQueue.add(v);
 //        }
@@ -76,14 +67,11 @@ public class MaximumCapacityPath {
 //            System.out.println("u.name:"+u.name);
 
             for(Edge e:u.edges){
-                if(e.flow < e.capacity){
 
-                    // Relax edges
-                    if(e.flow < e.capacity && e.v.distance < Math.min(e.u.distance, e.capacity-e.flow)){
-                        e.v.distance = Math.min(e.u.distance, e.capacity-e.flow);
-                        e.v.parent = u;
-                        pQueue.offer(e.v);
-                    }
+//            System.out.println("e.flow:"+e.flow+"e.capacity"+e.capacity);
+
+                if(e.flow < e.capacity){
+                    Relax(u,e.v,1,pQueue);
                 }
             }
         }
@@ -96,6 +84,12 @@ public class MaximumCapacityPath {
         Vertex temp = sink;
 
         while(temp != null){
+
+            if(temp.parent!=null){
+                if(temp.name==31){
+                    System.out.println("------------------------------");
+                }
+            }
 
 
 //            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
@@ -268,5 +262,8 @@ public class MaximumCapacityPath {
 
         return residualGraph;
     }
+
+
+
 
 }
