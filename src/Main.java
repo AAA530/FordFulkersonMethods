@@ -15,11 +15,11 @@ public class Main {
         double r = 0.2; // replace with your desired maximum distance
         int upperCap = 100; // replace with your desired maximum capacity
 
-//        Graph graph = generateSinkSourceGraph(n, r, upperCap);
-//        System.out.println(graph.bfsLength);
-//        graph.printGraph();
-//
-//        graph.saveToCSV("src/graph.csv");
+        Graph graph = generateSinkSourceGraph(n, r, upperCap);
+        System.out.println(graph.bfsLength);
+        graph.printGraph();
+
+        graph.saveToCSV("src/graph.csv");
 
         System.out.println("-------------------------");
         Graph loadedGraph = loadFromCSV("src/graph.csv");

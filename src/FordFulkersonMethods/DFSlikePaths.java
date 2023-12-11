@@ -10,13 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.PriorityQueue;
 
+
 public class DFSlikePaths {
 
-    private int counter=0;
+    private int counter=99999;
     private void initializeSingleSource(Graph G,Vertex source){
 
         for(Vertex v:G.vertices){
-            v.distance=99999;
+            v.distance=9999999;
             v.parent = null;
         }
 
@@ -30,7 +31,7 @@ public class DFSlikePaths {
 //        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
 
 //        System.out.println("Relax "+u.name+","+v.name);
-        if(v.distance==99999){
+        if(v.distance==9999999){
             v.distance = this.counter--;
             v.parent = u;
             pQueue.offer(v);
@@ -49,15 +50,17 @@ public class DFSlikePaths {
 
     private List<Vertex> Dijkastra(Graph g, Vertex source,Vertex sink) {
 
-        this.counter = 0;
+        this.counter = 99999;
 
         initializeSingleSource(g,source);
 
 
         PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator());
-        for(Vertex v:g.vertices){
-            pQueue.add(v);
-        }
+//        for(Vertex v:g.vertices){
+//            pQueue.add(v);
+//        }
+
+        pQueue.offer(source);
 
         while (!pQueue.isEmpty()){
             Vertex u = pQueue.poll();
@@ -65,6 +68,8 @@ public class DFSlikePaths {
 //            System.out.println("u.name:"+u.name);
 
             for(Edge e:u.edges){
+
+//            System.out.println("e.flow:"+e.flow+"e.capacity"+e.capacity);
 
                 if(e.flow < e.capacity){
                     Relax(u,e.v,1,pQueue);
@@ -80,7 +85,15 @@ public class DFSlikePaths {
         Vertex temp = sink;
 
         while(temp != null){
-            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
+
+            if(temp.parent!=null){
+                if(temp.name==31){
+                    System.out.println("------------------------------");
+                }
+            }
+
+
+//            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
             augmentingPath.add(temp);
             temp = temp.parent;
         }
@@ -175,6 +188,7 @@ public class DFSlikePaths {
             maxflow += residualCapacity;
             System.out.println("maxFlow: "+maxflow);
             residualGraph = residualGraph(G);
+//            residualGraph.printGraph();
 //            residualGraph.printGraph();
 
             augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
