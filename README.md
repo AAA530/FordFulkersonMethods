@@ -40,19 +40,26 @@ This project aims to implement and compare different augmenting path algorithms 
 
 ## Compile & Run
 
-1. To run this program we need to execute the Main.java file, this will start the command line execution of the program. The first step is to choose whether you want to generate a graph or run the Ford-Fulkerson algorithm on a already generated graph.
+1. To run this program we need to execute the Main.java file, this will start the command line execution of the program. The first step is to choose whether you want to generate a graph or run the Ford-Fulkerson algorithm on an already-generated graph.
 2. U can specify the path where the graphs are stored.
 ```
         String graphLocation = "GeneratedGraphs/graph"+n+"-"+r+"-"+upperCap+".csv"; // where to store graph
 ```
 3. The code will run by itself for the input values of n = 200, r = 0.3, upperCap = 50.
 4. The Graph is already generated in the files [GeneratedGraphs](./GeneratedGraphs).
-5. The Output will be printed on the console.
-6. The output will be an object of the Result class which contains the following 4 parameters:-
+5. U can complile the java file [Main.java](./src/Main.java)
+```
+javac Main.java
+java Main
+```
+7. The Output will be printed on the console.
+8. The output will be an object of the Result class which contains the following 4 parameters:-
    * Paths: the number of augmenting paths required until Ford-Fulkerson completes.
    * Mean length (ML): average length (i.e., number of edges) of the augmenting paths.
    * Mean proportional length (MPL): the average length of the augmenting path as a fraction of the longest acyclic path from source to sink.
    * Total edges: the total number of edges in the graph.
+
+
 
 
 ## How to change the input values 
@@ -76,6 +83,7 @@ This project aims to implement and compare different augmenting path algorithms 
    * Mean proportional length (MPL): the average length of the augmenting path as a fraction of the longest acyclic path from source to sink.
    * Total edges: the total number of edges in the graph.
 
+## I have created the project in IntelliJ IDE. If possible run the project in IntelliJ IDE so that the compile and run process will be easy. 
 
 ## Sample Output
 
