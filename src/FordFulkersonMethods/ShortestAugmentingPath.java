@@ -6,25 +6,6 @@ import GraphPackage.Vertex;
 import Results.Result;
 
 import java.util.*;
-
-//class VertexWrapper{
-//    Vertex v;
-//    int distance;
-//
-//    Vertex parent;
-//
-//
-//
-//    public VertexWrapper(Vertex v,int distance){
-//        this.v = v;
-//        this.distance = distance;
-//        this.parent = null;
-//    }
-//    public void setParent(Vertex p){
-//        this.parent = p;
-//    }
-//}
-
 class VertexComparator implements Comparator<Vertex> {
     @Override
     public int compare(Vertex o1, Vertex o2) {
@@ -38,30 +19,20 @@ class VertexComparator implements Comparator<Vertex> {
 
 
 public class ShortestAugmentingPath {
-
-
     private void initializeSingleSource(Graph G,Vertex source){
-
         for(Vertex v:G.vertices){
             v.distance=99999;
             v.parent = null;
         }
-
         source.distance=0;
-
     }
 
     private void Relax(Vertex u,Vertex v,int w,PriorityQueue<Vertex> pQueue){
-
-//        System.out.println("Relax "+u.v.name+","+v.v.name);
-//        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
-
         if(v.distance >u.distance +w){
             v.distance = u.distance + 1;
             v.parent = u;
 
             pQueue.offer(v);
-//            pQueue.add(v);
         }
     }
 
@@ -73,40 +44,24 @@ public class ShortestAugmentingPath {
 
 
         PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator());
-        for(Vertex v:g.vertices){
-            pQueue.add(v);
-        }
+        pQueue.offer(source);
 
         while (!pQueue.isEmpty()){
             Vertex u = pQueue.poll();
-
-//            System.out.println("u.name:"+u.name);
-
             for(Edge e:u.edges){
-
                 if(e.flow < e.capacity){
                     Relax(u,e.v,1,pQueue);
                 }
             }
         }
 
-//        for(Vertex v:g.vertices){
-//            System.out.println(v.name+" v.parent "+(v.parent!=null ? v.parent.name:"null")+ " v.distance "+v.distance);
-//        }
-
         List<Vertex> augmentingPath = new ArrayList<>();
         Vertex temp = sink;
-
         while(temp != null){
-//            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
             augmentingPath.add(temp);
             temp = temp.parent;
         }
-
-//        augmentingPath.add(temp);
-
         Collections.reverse(augmentingPath);
-
         return augmentingPath;
     }
 
@@ -116,30 +71,22 @@ public class ShortestAugmentingPath {
 
         int maxflow = 0,paths=0;
         List<Double> meanLength = new ArrayList<>();
-        double meanProportionalLength=0,totalEdges=0;
 
         Graph residualGraph = residualGraph(G);
-
-//        residualGraph.printGraph();
-
-//        List<Vertex> augmentingPath = dijkastra(residualGraph, source, sink);
         List<Vertex> augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
 
 
 
         while(augmentingPath != null && augmentingPath.size() > 1){
-
             paths++;
-
-
-            if (augmentingPath != null) {
-                System.out.print("Augmenting path: ");
-                for (Vertex v : augmentingPath) {
-                    System.out.print(v.name + "->");
-                }
-            } else {
-                System.out.println("No augmenting path found.");
-            }
+//            if (augmentingPath != null) {
+//                System.out.print("Augmenting path: ");
+//                for (Vertex v : augmentingPath) {
+//                    System.out.print(v.name + "->");
+//                }
+//            } else {
+//                System.out.println("No augmenting path found.");
+//            }
 
 
 
@@ -156,7 +103,7 @@ public class ShortestAugmentingPath {
                 }
             }
 
-            System.out.println("residualCapacity"+residualCapacity);
+//            System.out.println("residualCapacity"+residualCapacity);
 
             double numberOfEdges = 0;
             // update capacities for residual graph based on residual capacity
@@ -170,33 +117,15 @@ public class ShortestAugmentingPath {
                         break;
                     }
                 }
-
-//                for(Edge e : residualGraph.get(u)){
-//                    if(e.dest == v){
-//                        e.capacity -= residualCapacity;
-//                        break;
-//                    }
-//                }
-//
-//                for(Edge bEdge : residualGraph.get(v)){
-//                    if(bEdge.dest == u){
-//                        bEdge.capacity += residualCapacity;
-//                        break;
-//                    }
-//                }
             }
 
             meanLength.add(numberOfEdges);
 
             maxflow += residualCapacity;
-            System.out.println("maxFlow: "+maxflow);
+//            System.out.println("maxFlow: "+maxflow);
             residualGraph = residualGraph(G);
-//            residualGraph.printGraph();
 
             augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
-
-
-
         }
 
 
@@ -242,17 +171,9 @@ public class ShortestAugmentingPath {
 
         }
 
-//        for(Vertex u:G.vertices){
-//            for(Edge originalGraphEdge:u.edges){
-//
-//
-//            }
-//        }
-
 
         Vertex source=null,sink=null;
         for(Vertex v:residualGraph.vertices){
-
             if(G.source.name==v.name){
                 source = v;
             }

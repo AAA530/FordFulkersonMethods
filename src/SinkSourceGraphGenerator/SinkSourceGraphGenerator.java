@@ -92,12 +92,12 @@ public class SinkSourceGraphGenerator {
         int length = 0;
 
         while (endNode != null && parentMap.get(endNode) != null) {
-            System.out.println(endNode.name);
+//            System.out.println(endNode.name);
             endNode = parentMap.get(endNode);
             length++;
         }
 
-        System.out.println("length"+length);
+//        System.out.println("length"+length);
         graph.setBFSLength(length);
         return returnNode;
     }

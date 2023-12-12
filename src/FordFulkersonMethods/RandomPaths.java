@@ -8,96 +8,49 @@ import Results.Result;
 import java.util.*;
 
 public class RandomPaths {
-
-
-//    private int counter=99999;
     private void initializeSingleSource(Graph G, Vertex source){
-
         for(Vertex v:G.vertices){
             v.distance=Integer.MAX_VALUE;
             v.parent = null;
         }
 
         source.distance=0;
-
     }
 
     private void Relax(Vertex u, Vertex v, int w, PriorityQueue<Vertex> pQueue){
-
-//        System.out.println("Relax "+u.v.name+","+v.v.name);
-//        System.out.println("u.distance "+u.distance+"v.distance"+v.distance);
-
-//        System.out.println("Relax "+u.name+","+v.name);
         if(v.distance==Integer.MAX_VALUE){
-//            v.distance = this.counter--;
             Random random = new Random();
             v.distance= random.nextInt();
             v.parent = u;
             pQueue.offer(v);
         }
-//        if(v.distance >u.distance +w){
-//            v.distance = u.distance + 1;
-//            v.parent = u;
-//
-//            pQueue.offer(v);
-////            pQueue.add(v);
-//        }
     }
 
 
 
 
     private List<Vertex> Dijkastra(Graph g, Vertex source, Vertex sink) {
-
-//        this.counter = 99999;
-
         initializeSingleSource(g,source);
-
-
         PriorityQueue<Vertex> pQueue = new PriorityQueue<>(new VertexComparator());
-//        for(Vertex v:g.vertices){
-//            pQueue.add(v);
-//        }
 
         pQueue.offer(source);
 
         while (!pQueue.isEmpty()){
             Vertex u = pQueue.poll();
-
-//            System.out.println("u.name:"+u.name);
-
             for(Edge e:u.edges){
-
-//            System.out.println("e.flow:"+e.flow+"e.capacity"+e.capacity);
-
                 if(e.flow < e.capacity){
                     Relax(u,e.v,1,pQueue);
                 }
             }
         }
 
-//        for(Vertex v:g.vertices){
-//            System.out.println(v.name+" v.parent "+(v.parent!=null ? v.parent.name:"null")+ " v.distance "+v.distance);
-//        }
-
         List<Vertex> augmentingPath = new ArrayList<>();
         Vertex temp = sink;
 
         while(temp != null){
-
-            if(temp.parent!=null){
-                if(temp.name==31){
-                    System.out.println("------------------------------");
-                }
-            }
-
-
-//            System.out.println(temp.name+" v.parent "+(temp.parent!=null ? temp.parent.name:"null"));
             augmentingPath.add(temp);
             temp = temp.parent;
         }
-
-//        augmentingPath.add(temp);
 
         Collections.reverse(augmentingPath);
 
@@ -112,13 +65,8 @@ public class RandomPaths {
 
         int maxflow = 0,paths=0;
         List<Double> meanLength = new ArrayList<>();
-        double meanProportionalLength=0,totalEdges=0;
 
         Graph residualGraph = residualGraph(G);
-
-//        residualGraph.printGraph();
-
-//        List<Vertex> augmentingPath = dijkastra(residualGraph, source, sink);
         List<Vertex> augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
 
 
@@ -128,14 +76,14 @@ public class RandomPaths {
             paths++;
 
 
-            if (augmentingPath != null) {
-                System.out.print("Augmenting path: ");
-                for (Vertex v : augmentingPath) {
-                    System.out.print(v.name + "->");
-                }
-            } else {
-                System.out.println("No augmenting path found.");
-            }
+//            if (augmentingPath != null) {
+//                System.out.print("Augmenting path: ");
+//                for (Vertex v : augmentingPath) {
+//                    System.out.print(v.name + "->");
+//                }
+//            } else {
+//                System.out.println("No augmenting path found.");
+//            }
 
 
 
@@ -152,7 +100,7 @@ public class RandomPaths {
                 }
             }
 
-            System.out.println("residualCapacity"+residualCapacity);
+//            System.out.println("residualCapacity"+residualCapacity);
 
             double numberOfEdges = 0;
             // update capacities for residual graph based on residual capacity
@@ -166,38 +114,14 @@ public class RandomPaths {
                         break;
                     }
                 }
-
-//                for(Edge e : residualGraph.get(u)){
-//                    if(e.dest == v){
-//                        e.capacity -= residualCapacity;
-//                        break;
-//                    }
-//                }
-//
-//                for(Edge bEdge : residualGraph.get(v)){
-//                    if(bEdge.dest == u){
-//                        bEdge.capacity += residualCapacity;
-//                        break;
-//                    }
-//                }
             }
 
             meanLength.add(numberOfEdges);
 
             maxflow += residualCapacity;
-            System.out.println("maxFlow: "+maxflow);
             residualGraph = residualGraph(G);
-//            residualGraph.printGraph();
-//            residualGraph.printGraph();
-
             augmentingPath = Dijkastra(residualGraph,residualGraph.source,residualGraph.sink);
-
-
-
         }
-
-
-
         System.out.println("MaxFlow"+maxflow);
         Result res = new Result(paths,meanLength,G.bfsLength,G);
         return res;
@@ -211,8 +135,6 @@ public class RandomPaths {
         for(Vertex v:G.vertices){
             Vertex vertex = new Vertex(v.x, v.y, v.name);
             residualGraph.addVertex(vertex);
-
-
         }
 
         for(Edge eOriginal:G.edges){
@@ -238,14 +160,6 @@ public class RandomPaths {
             residualGraph.addEdge(toAddV,toAddU,flow,0);
 
         }
-
-//        for(Vertex u:G.vertices){
-//            for(Edge originalGraphEdge:u.edges){
-//
-//
-//            }
-//        }
-
 
         Vertex source=null,sink=null;
         for(Vertex v:residualGraph.vertices){
