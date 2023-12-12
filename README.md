@@ -41,7 +41,7 @@ This project aims to implement and compare different augmenting path algorithms 
 ## Compile & Run
 
 1. To run this program we need to execute the Main.java file, this will start the command line execution of the program. The first step is to choose whether you want to generate a graph or run the Ford-Fulkerson algorithm on a already generated graph.
-2. The code will run by itself for the input values of n = 200, r = 0.3, upperCap = 50.s
+2. The code will run by itself for the input values of n = 200, r = 0.3, upperCap = 50.
 3. The Graph is already generated in the files [GeneratedGraphs](./GeneratedGraphs).
 4. The Output will be printed on the console.
 5. The output will be an object of the Result class which contains the following 4 parameters:-
