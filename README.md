@@ -17,7 +17,7 @@ This project aims to implement and compare different augmenting path algorithms 
 
 ## Folder Structure
 
-# src
+### src
 
 * [FordFulkersonMethods/](./src/FordFulkersonMethods)
   * [DFSlikePaths.java](./src/FordFulkersonMethods/DFSlikePaths.java)
