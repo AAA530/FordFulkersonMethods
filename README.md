@@ -41,10 +41,14 @@ This project aims to implement and compare different augmenting path algorithms 
 ## Compile & Run
 
 1. To run this program we need to execute the Main.java file, this will start the command line execution of the program. The first step is to choose whether you want to generate a graph or run the Ford-Fulkerson algorithm on a already generated graph.
-2. The code will run by itself for the input values of n = 200, r = 0.3, upperCap = 50.
-3. The Graph is already generated in the files [GeneratedGraphs](./GeneratedGraphs).
-4. The Output will be printed on the console.
-5. The output will be an object of the Result class which contains the following 4 parameters:-
+2. U can specify the path where the graphs are stored.
+```
+        String graphLocation = "GeneratedGraphs/graph"+n+"-"+r+"-"+upperCap+".csv"; // where to store graph
+```
+3. The code will run by itself for the input values of n = 200, r = 0.3, upperCap = 50.
+4. The Graph is already generated in the files [GeneratedGraphs](./GeneratedGraphs).
+5. The Output will be printed on the console.
+6. The output will be an object of the Result class which contains the following 4 parameters:-
    * Paths: the number of augmenting paths required until Ford-Fulkerson completes.
    * Mean length (ML): average length (i.e., number of edges) of the augmenting paths.
    * Mean proportional length (MPL): the average length of the augmenting path as a fraction of the longest acyclic path from source to sink.
@@ -59,10 +63,14 @@ This project aims to implement and compare different augmenting path algorithms 
         Graph graph = generateSinkSourceGraph(n, r, upperCap);
         graph.saveToCSV(graphLocation);
 ```
-4. And complie and run.
-5. The generated Graph will be in [GeneratedGraphs](./GeneratedGraphs).
-6. The Output will be printed on the console.
-7. The output will be an object of the Result class which contains the following 4 parameters:-
+3. you can also change where the graph is stored by changing the line in Main.java
+```
+        String graphLocation = "GeneratedGraphs/graph"+n+"-"+r+"-"+upperCap+".csv"; // where to store graph
+```
+5. And complie and run.
+6. The generated Graph will be in [GeneratedGraphs](./GeneratedGraphs).
+7. The Output will be printed on the console.
+8. The output will be an object of the Result class which contains the following 4 parameters:-
    * Paths: the number of augmenting paths required until Ford-Fulkerson completes.
    * Mean length (ML): average length (i.e., number of edges) of the augmenting paths.
    * Mean proportional length (MPL): the average length of the augmenting path as a fraction of the longest acyclic path from source to sink.
