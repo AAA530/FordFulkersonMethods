@@ -1,7 +1,5 @@
 
 # Dhairya Patel
-# 40231545
-
 # Project Description 
 
 This project aims to implement and compare different augmenting path algorithms for the Ford-Fulkerson maximum flow algorithm. The study focuses on four variations: Shortest Augmenting Path (SAP), DFS-like, Maximum Capacity (MaxCap), and Randomized Augmenting Path algorithms. These algorithms will be tested on randomly generated source-sink graphs
